@@ -21,10 +21,10 @@
 
 1. Install [PythonSDK and Willow2 Mod Manager](https://bl-sdk.github.io/willow2-mod-db/).
 2. Close Borderlands 2 and back up your existing `sdk_mods/AutoPickup/` folder and saved SDK settings.
-3. When a **Player ZIP** is published, extract its `AutoPickup/` folder into `Borderlands 2/sdk_mods/`. Remove duplicate installations.
+3. Download the matching **Player ZIP** from the [Releases page](https://github.com/PeytonBlakeslee/AutoPickup/releases), then extract its `AutoPickup/` folder into `Borderlands 2/sdk_mods/`. Remove duplicate installations.
 4. Confirm `sdk_mods/AutoPickup/__init__.py`, then launch the game and enable **Auto Pickup** in the SDK Mods menu.
 
-**Availability:** No public Player ZIP has been published yet. GitHub's automatic source ZIP is not an installable Player package.
+**Download:** Use the matching Player ZIP on the [Releases page](https://github.com/PeytonBlakeslee/AutoPickup/releases). If no public download is listed, publication is still pending. GitHub's automatic source ZIP is not an installable Player package.
 
 See the [user guide](docs/USER_GUIDE.md#install-update-and-rollback) for updates, rollback, and troubleshooting.
 
