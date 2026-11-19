@@ -1,4 +1,4 @@
-# Auto Pickup 0.3.5-beta.3
+# Auto Pickup 1.0.0
 
 Automatically collects nearby eligible ammo, currency, and consumables in Borderlands 2. Equipment pickup is optional and **Off by default**. Stock inventory checks and identified protected mission-item exclusions remain in place.
 

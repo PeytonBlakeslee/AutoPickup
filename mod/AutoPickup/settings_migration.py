@@ -78,7 +78,7 @@ def cleanup_obsolete_settings(settings_file, deprecated_keys, log, log_exception
         # Preserve all other values, including options not recognized by this build.
         # Atomic replacement avoids truncating the player's file during a crash.
         atomic_write_json(settings_file, saved)
-        log("removed retired mission-item setting from saved options")
+        log("removed retired option keys from saved settings")
     except Exception as exc:
         # Settings cleanup must not stop the mod from loading.
         log_exception("cleaning obsolete settings", exc)

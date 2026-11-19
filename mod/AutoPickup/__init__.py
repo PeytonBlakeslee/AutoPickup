@@ -29,7 +29,7 @@ from mods_base import (
 )
 from unrealsdk import logging
 
-__version__ = "0.3.5-beta.3"
+__version__ = "1.0.0"
 __author__ = "Peyton"
 
 _MOD_NAME = "Auto Pickup"
@@ -78,7 +78,7 @@ def _log_exception(context: str, exc: BaseException) -> None:
             context,
             type(exc).__name__,
             exc,
-            traceback.format_exc(),
+            "".join(traceback.format_exception(type(exc), exc, exc.__traceback__)),
         )
     )
 
@@ -794,8 +794,9 @@ class AutoPickupRuntime:
                 exists = hooks.has_hook(*entry)
             except Exception as exc:
                 _log_exception('removing hook {}'.format(hook_id), exc)
-                # A thrown remove can be a transient failure. Retain the
-                # ledger only while the ID is still present, for later cleanup.
+                # Removal is unresolved after an exception. Retain the previously
+                # owned entry for later cleanup; ID presence cannot prove that
+                # the same callback still owns it.
                 pending.append(entry)
                 continue
             if exists:
@@ -1350,6 +1351,11 @@ class AutoPickupRuntime:
                     continue
                 if self._candidates.get(address) is entry:
                     self._candidates[address] = (pointer, category, now + self._FAILED_RETRY_SECONDS, rarity_level)
+                    if is_client:
+                        # A rejected client request may leave the actor alive.
+                        # Rotate it behind untouched candidates so an eight-per-
+                        # second budget cannot starve later eligible pickups.
+                        self._candidates[address] = self._candidates.pop(address)
             except Exception as exc:
                 self._forget_candidate_if_current(address, entry)
                 _log_exception('servicing one pickup', exc)
@@ -1417,7 +1423,7 @@ class AutoPickupRuntime:
 
     def _forget_candidate_if_current(self, address: int, entry) -> None:
         # Native queries/calls may reenter registration at the same address.
-        # A service snapshot must never remove a newer candidate or its diagnostics.
+        # A service snapshot must never remove a newer candidate.
         if self._candidates.get(address) is entry:
             self._forget_candidate(address)
 
